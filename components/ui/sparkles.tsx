@@ -32,14 +32,15 @@ export const SparklesCore = (props: {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [particles, setParticles] = useState<
-    Array<{
-      x: number
-      y: number
-      size: number
-      speedX: number
-      speedY: number
-    }>
+    Array<{ x: number; y: number; size: number; speedX: number; speedY: number }>
   >([])
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -49,19 +50,18 @@ export const SparklesCore = (props: {
   }, [])
 
   useEffect(() => {
-    if (context) {
+    if (context && dimensions.width && dimensions.height) {
       initParticles()
       animate && animateParticles()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context, animate]) // Added 'animate' to dependencies
+  }, [context, animate, dimensions]) // Added 'dimensions' to dependencies
 
   const initParticles = () => {
     const particlesArray = []
     for (let i = 0; i < particleDensity; i++) {
       const particle = {
-        x: Math.random() * window.innerWidth + particleOffsetX,
-        y: Math.random() * window.innerHeight + particleOffsetY,
+        x: Math.random() * dimensions.width + particleOffsetX,
+        y: Math.random() * dimensions.height + particleOffsetY,
         size: Math.random() * (maxSize - minSize) + minSize,
         speedX: (Math.random() - 0.5) * speed,
         speedY: (Math.random() - 0.5) * speed,
@@ -74,9 +74,9 @@ export const SparklesCore = (props: {
   const animateParticles = () => {
     if (!context) return
 
-    context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    context.clearRect(0, 0, dimensions.width, dimensions.height)
     context.fillStyle = background
-    context.fillRect(0, 0, window.innerWidth, window.innerHeight)
+    context.fillRect(0, 0, dimensions.width, dimensions.height)
 
     particles.forEach((particle) => {
       context.beginPath()
@@ -87,11 +87,11 @@ export const SparklesCore = (props: {
       particle.x += particle.speedX
       particle.y += particle.speedY
 
-      if (particle.x > window.innerWidth) particle.x = 0
-      else if (particle.x < 0) particle.x = window.innerWidth
+      if (particle.x > dimensions.width) particle.x = 0
+      else if (particle.x < 0) particle.x = dimensions.width
 
-      if (particle.y > window.innerHeight) particle.y = 0
-      else if (particle.y < 0) particle.y = window.innerHeight
+      if (particle.y > dimensions.height) particle.y = 0
+      else if (particle.y < 0) particle.y = dimensions.height
     })
 
     animate && requestAnimationFrame(animateParticles)
@@ -102,9 +102,8 @@ export const SparklesCore = (props: {
       ref={canvasRef}
       id={id}
       className={cn("fixed inset-0 h-screen w-screen", className)}
-      width={window.innerWidth}
-      height={window.innerHeight}
+      width={dimensions.width}
+      height={dimensions.height}
     />
   )
 }
-
