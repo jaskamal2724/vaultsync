@@ -1,101 +1,92 @@
-import Image from "next/image";
+"use client"
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
+import { FloatingParticles } from "@/components/ui/floating-particles"
+import { SparklesCore } from "@/components/ui/sparkles"
+import { MovingGradientText } from "@/components/ui/moving-gradient-text"
+import { BeatingText } from "@/components/ui/beating-text"
+import { useSpring, animated as a } from "react-spring"
+import { Lock, Share2, RefreshCw } from "lucide-react"
 
-export default function Home() {
+export default function LandingPage() {
+  const fadeIn = useSpring({
+    from: { opacity: 0, y: 20 },
+    to: { opacity: 1, y: 0 },
+    delay: 300,
+  })
+
+  const features = [
+    {
+      title: "Secure Storage",
+      description: "End-to-end encryption for all your files",
+      icon: Lock,
+    },
+    {
+      title: "Easy Sharing",
+      description: "Share files with anyone, anywhere",
+      icon: Share2,
+    },
+    {
+      title: "Auto Sync",
+      description: "Real-time sync across all devices",
+      icon: RefreshCw,
+    },
+  ] as const
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black via-purple-900 to-black text-white overflow-hidden">
+      <FloatingParticles />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <nav className="w-full p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold">
+            <MovingGradientText text="VaultSync" />
+          </Link>
+          <div className="space-x-4">
+            <Button variant="ghost">Login</Button>
+            <Button>Sign Up</Button>
+          </div>
         </div>
+      </nav>
+
+      {/* Main content with flex-grow */}
+      <main className="flex flex-col flex-grow items-center justify-center text-center px-4">
+        <div className="relative w-[40rem] h-40 mb-8">
+          <SparklesCore background="transparent" minSize={0.4} maxSize={1} particleDensity={100} className="w-full h-full" particleColor="#8B5CF6" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <BeatingText text="VaultSync" className="text-5xl font-bold" />
+          </div>
+        </div>
+
+        <TextGenerateEffect words="Unlock the power of seamless storage. Your files, your world, one cloud." className="text-xl mb-6" />
+
+        <div className="grid grid-cols-1 sm:grid-cols-1 sm:w-80 md:grid-cols-3 md:w-[700px] gap-4 max-w-4xl mb-8">
+          {features.map((feature, index) => (
+            <div key={index} className="p-4 rounded-lg bg-purple-900/20 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300">
+              <feature.icon className="w-6 h-6 mb-2 mx-auto text-purple-400" />
+              <h3 className="font-semibold mb-1">{feature.title}</h3>
+              <p className="text-sm text-gray-300">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="relative w-64 h-64 mx-auto mb-8">
+          <Image src="/cloudvault-animated-logo.svg" alt="CloudVault Illustration" layout="fill" objectFit="contain" className="animate-float" />
+        </div>
+
+        {/* Make sure the button doesn't go below footer */}
+        <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white transition-all animate-bounce duration-3000">
+          Get Started
+        </Button>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer stays at the bottom */}
+      <footer className="w-full p-4 text-center text-sm text-gray-400">
+        © 2025 CloudVault. All rights reserved.
       </footer>
     </div>
-  );
+  )
 }
+
