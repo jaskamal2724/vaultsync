@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 
 export const MovingGradientText = ({ text }: { text: string }) => {
   return (
-    <motion.div className="relative inline-block" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+    <motion.div className="relative inline-block text-xl" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
       <motion.span
         className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600"
         style={{

@@ -7,62 +7,115 @@ import { FloatingParticles } from "@/components/ui/floating-particles"
 import { SparklesCore } from "@/components/ui/sparkles"
 import { MovingGradientText } from "@/components/ui/moving-gradient-text"
 import { BeatingText } from "@/components/ui/beating-text"
-import { useSpring, animated } from '@react-spring/web'
+import { Menu } from "lucide-react"
+import { motion } from "framer-motion"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Lock, Share2, RefreshCw } from "lucide-react"
 
 export default function LandingPage() {
-  const fadeIn = useSpring({
-    from: { opacity: 0, y: 20 },
-    to: { opacity: 1, y: 0 },
-    delay: 300,
-  })
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-black via-purple-900 to-black text-white overflow-hidden">
-      <FloatingParticles />
+    <div className="relative min-h-screen w-screen overflow-hidden bg-gradient-to-br from-black via-purple-900 to-black text-white flex flex-col items-center">
+      {/* FloatingParticles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <FloatingParticles />
+      </div>
 
-      <nav className="w-full p-4 absolute top-0 left-0 z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold">
-            <MovingGradientText text="CloudVault" />
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 p-4 z-50 w-full">
+        <div className="container mx-auto flex justify-between items-center max-w-6xl px-2">
+          <Link href="/" className="relative z-50 flex items-center gap-1 hover:opacity-80 transition-opacity">
+            <MovingGradientText text="CloudVault"  />
           </Link>
-          <div className="space-x-4">
-            <Button variant="ghost">Login</Button>
-            <Button>Sign Up</Button>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-3 relative z-50">
+            <Button variant="ghost" className="text-sm hover:bg-purple-700/50" onClick={() => console.log("Login clicked")}>
+              Login
+            </Button>
+            <Button className="text-sm hover:bg-purple-700" onClick={() => console.log("Sign Up clicked")}>
+              Sign Up
+            </Button>
           </div>
+
+          {/* Mobile Navigation */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden relative z-50">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-black/95 border-purple-900/50 w-[75%] sm:w-[300px]">
+              <div className="flex flex-col space-y-3 mt-6">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-sm hover:bg-purple-700/50 py-2"
+                  onClick={() => console.log("Mobile Login clicked")}
+                >
+                  Login
+                </Button>
+                <Button
+                  className="w-full justify-start text-sm hover:bg-purple-700 py-2"
+                  onClick={() => console.log("Mobile Sign Up clicked")}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
 
-      <main className="text-center z-10">
-        <animated.div
-          style={{
-            transform: fadeIn.y.to((y) => `translateY(${y}px)`),
-            opacity: fadeIn.opacity,
-          }}
+      <main className="relative z-10 w-full px-4 pt-16 sm:pt-20 md:pt-24 flex-grow flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-6xl"
         >
-          <div className="relative w-[40rem] h-40 mb-8">
+          {/* Hero Section */}
+          <div className="relative w-full max-w-[90vw] sm:max-w-[40rem] h-24 sm:h-32 md:h-40 mb-6 mx-auto overflow-hidden">
             <SparklesCore
               background="transparent"
-              minSize={0.4}
-              maxSize={1}
-              particleDensity={100}
+              minSize={0.3}
+              maxSize={0.8}
+              particleDensity={80}
               className="w-full h-full"
               particleColor="#8B5CF6"
             />
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <BeatingText text="CloudVault" className="text-5xl font-bold" />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center">
+              <BeatingText
+                text="CloudVault"
+                className="text-2xl sm:text-3xl md:text-5xl font-bold whitespace-nowrap"
+              />
             </div>
           </div>
 
-          <div className="max-w-2xl mx-auto mb-8">
+          {/* Tagline */}
+          <div className="max-w-[90vw] sm:max-w-lg md:max-w-2xl mx-auto mb-6 text-center">
             <TextGenerateEffect
               words="Unlock the power of seamless storage. Your files, your world, one cloud."
-              className="text-xl"
+              className="text-sm sm:text-base md:text-xl"
             />
           </div>
 
-          <div className="relative w-64 h-64 mx-auto mb-8">
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto mb-6">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="p-3 sm:p-4 rounded-lg bg-purple-900/20 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300"
+              >
+                <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 mb-2 mx-auto text-purple-400" />
+                <h3 className="font-semibold text-sm sm:text-base mb-1 text-center">{feature.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-300 text-center">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Logo Image */}
+          <div className="relative w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 mx-auto mb-6">
             <Image
-              src="/placeholder.svg"
+              src="/cloudvault-logo.png"
               alt="CloudVault Illustration"
               layout="fill"
               objectFit="contain"
@@ -70,18 +123,42 @@ export default function LandingPage() {
             />
           </div>
 
-          <Button
-            size="lg"
-            className="bg-purple-600 hover:bg-purple-700 text-white animate-pulse hover:animate-none transition-all duration-300"
-          >
-            Get Started
-          </Button>
-        </animated.div>
+          {/* CTA Button */}
+          <div className="text-center">
+            <Button
+              size="lg"
+              className="bg-purple-600 hover:bg-purple-700 text-white text-sm sm:text-base animate-pulse hover:animate-none transition-all duration-300 w-3/4 sm:w-auto px-6 py-2 sm:py-3 relative z-10"
+              onClick={() => console.log("Get Started clicked")}
+            >
+              Get Started
+            </Button>
+          </div>
+        </motion.div>
       </main>
 
-      <footer className="absolute bottom-4 text-center text-sm text-gray-400">
-        © 2025 CloudVault. All rights reserved.
+      {/* Footer */}
+      <footer className="relative z-10 w-full text-center text-xs text-gray-400 p-4">
+        <p>© 2025 CloudVault. All rights reserved.</p>
       </footer>
     </div>
   )
 }
+
+// Features data
+const features = [
+  {
+    title: "Secure Storage",
+    description: "End-to-end encryption for all your files",
+    icon: Lock,
+  },
+  {
+    title: "Easy Sharing",
+    description: "Share files with anyone, anywhere",
+    icon: Share2,
+  },
+  {
+    title: "Auto Sync",
+    description: "Real-time sync across all devices",
+    icon: RefreshCw,
+  },
+] as const
