@@ -10,7 +10,9 @@ import Link from 'next/link'
 import { Lock, Mail, User, Eye, EyeOff } from 'lucide-react'
 
 
-const Login = ({ mode = 'register' }) => {
+const Login = () => {
+  const [mode, setMode]=useState("login")
+
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -148,14 +150,14 @@ const Login = ({ mode = 'register' }) => {
             {mode === 'login' ? (
               <>
                 Don't have an account?{' '}
-                <Link href="/register" className="text-purple-400 hover:text-purple-300">
+                <Link href="#" className="text-purple-400 hover:text-purple-300" onClick={()=>setMode("register")}>
                   Sign up
                 </Link>
               </>
             ) : (
               <>
                 Already have an account?{' '}
-                <Link href="/login" className="text-purple-400 hover:text-purple-300">
+                <Link href="#" className="text-purple-400 hover:text-purple-300" onClick={()=>setMode("login")}>
                   Sign in
                 </Link>
               </>
