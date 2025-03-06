@@ -9,14 +9,23 @@ const client = new Client()
 
 const databases = new Databases(client);
 
+// Define parameter type
+type RouteParams = {
+  params: {
+    fileId: string;
+  };
+};
+
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { fileId: string } }
+  context: RouteParams
 ) {
   try {
     // Get fileId from params
     console.log(req.method)
-    const { fileId } = params;
+
+    const  fileId  =context.params.fileId;
+
     console.log(fileId);
     
     // Validate input
