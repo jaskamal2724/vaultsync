@@ -39,7 +39,7 @@ const TrashPage = () => {
   const handleDelete = async (fileId: string) => {
     try {
       // console.log(fileId)
-      const res = await axios.delete(`/api/delete/${fileId}`);
+      const res = await axios.delete("/api/delete",{data:{fileId}});
       if (res) {
         console.log("deleted permanently");
       }
@@ -53,7 +53,7 @@ const TrashPage = () => {
 
   const handlepermant=async(fileid:string)=>{
     try {
-      await axios.delete(`/api/pmd/${fileid}`)
+      await axios.delete("/api/pmd",{data:{fileid}})
     } catch (error) {
       console.log(error)
     }

@@ -11,16 +11,16 @@ const storage = new Storage(client);
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { fileId: string } }
+  
 ) {
   try {
-    console.log(req.method)
-    const { fileId } =await  params;
+    
+    const { fileid } = await req.json();
 
-    console.log("Deleting file from storage with ID:", fileId);
+    console.log("Deleting file from storage with ID:", fileid);
 
     // Validate input
-    if (!fileId) {
+    if (!fileid) {
       return NextResponse.json(
         { message: "File ID is required" },
         { status: 400 }
@@ -28,7 +28,7 @@ export async function DELETE(
     }
 
     // ✅ Permanently delete file from Appwrite Storage
-    await storage.deleteFile(process.env.BUCKET_ID as string, fileId);
+    await storage.deleteFile(process.env.BUCKET_ID as string, fileid);
 
     return NextResponse.json(
       { message: "File permanently deleted from storage" },
