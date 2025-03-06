@@ -14,10 +14,11 @@ export async function DELETE(
   { params }: { params: { fileId: string } }
 ) {
   try {
-    // Parse JSON body
+    // Get fileId from params
     console.log(req.method)
-    const { fileId } = await  params;
+    const { fileId } = params;
     console.log(fileId);
+    
     // Validate input
     if (!fileId) {
       return NextResponse.json(
@@ -27,29 +28,24 @@ export async function DELETE(
     }
 
     // Delete document by ID
-    const res = await databases.deleteDocument(
+    await databases.deleteDocument(
       process.env.DATABASE_ID as string,
       process.env.COLLECTION_ID as string,
       fileId
     );
-    // console.log(res);
-    if (res) {
-      return NextResponse.json(
-        { message: "File deleted successfully" },
-        { status: 200 }
-      );
-    }
-    else{
-        return NextResponse.json(
-            { message: "File not  deleted " },
-            { status: 400 }
-          );
-    }
+    
+    return NextResponse.json(
+      { message: "File deleted successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error deleting file:", error);
 
     return NextResponse.json(
-      { message: "Failed to delete file", error: error },
+      { 
+        message: "Failed to delete file", 
+        error: error instanceof Error ? error.message : String(error) 
+      },
       { status: 500 }
     );
   }
