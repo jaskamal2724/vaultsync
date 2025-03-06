@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { FloatingParticles } from "@/components/ui/floating-particles";
-import { SparklesCore } from "@/components/ui/sparkles";
 import { MovingGradientText } from "@/components/ui/moving-gradient-text";
 import { BeatingText } from "@/components/ui/beating-text";
 import { Menu } from "lucide-react";
@@ -113,14 +112,7 @@ export default function LandingPage() {
         >
           {/* Hero Section */}
           <div className="relative w-full max-w-[90vw] sm:max-w-[40rem] h-24 sm:h-32 md:h-40 mb-6 mx-auto overflow-hidden">
-            <SparklesCore
-              background="transparent"
-              minSize={0.3}
-              maxSize={0.8}
-              particleDensity={80}
-              className="w-full h-full"
-              particleColor="#8B5CF6"
-            />
+            
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center">
               <BeatingText
                 text="VaultSync"

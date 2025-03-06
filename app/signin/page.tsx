@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { SparklesCore } from "@/components/ui/sparkles";
 import { MovingGradientText } from "@/components/ui/moving-gradient-text";
 import Link from "next/link";
 import { Lock, Mail, User, Eye, EyeOff } from "lucide-react";
@@ -120,15 +119,7 @@ const Login = () => {
       />
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-purple-900 to-black p-4">
         <div className="absolute inset-0 overflow-hidden">
-          <SparklesCore
-            id="tsparticles"
-            background="transparent"
-            minSize={0.6}
-            maxSize={1.4}
-            particleDensity={50}
-            className="w-full h-full"
-            particleColor="#8B5CF6"
-          />
+          
         </div>
 
         <Card className="w-full max-w-md bg-black/40 backdrop-blur-xl border border-purple-500/20">
