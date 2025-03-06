@@ -36,26 +36,6 @@ export const SparklesCore = (props: {
   >([])
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setDimensions({ width: window.innerWidth, height: window.innerHeight })
-    }
-  }, [])
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d")
-      setContext(ctx)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (context && dimensions.width && dimensions.height) {
-      initParticles()
-      animate && animateParticles()
-    }
-  }) // Added 'dimensions' to dependencies
-
   const initParticles = () => {
     const particlesArray = []
     for (let i = 0; i < particleDensity; i++) {
@@ -96,6 +76,25 @@ export const SparklesCore = (props: {
 
     animate && requestAnimationFrame(animateParticles)
   }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d")
+      setContext(ctx)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (context && dimensions.width && dimensions.height) {
+      initParticles()
+      animate && animateParticles()
+    }
+  }) // Added 'dimensions' to dependencies
 
   return (
     <canvas
