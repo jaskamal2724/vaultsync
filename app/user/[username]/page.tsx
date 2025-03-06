@@ -31,6 +31,7 @@ import LoadingDots from "@/components/LoadindDots";
 import { useRouter } from "next/navigation";
 import {   signOut } from "firebase/auth";
 import { auth } from "@/app/firebase";
+import Image from "next/image";
 
 interface CloudFile {
   $id: string;
@@ -41,6 +42,7 @@ interface CloudFile {
   fileUrl: string; // Add this new field
 }
 interface DeletedFile{
+  $id:string,
   fileid:string
 }
 
@@ -69,7 +71,7 @@ export default function DashboardPage() {
         // console.log("all uploaded files", response.data.fileswithurl);
 
         const filesData = response.data.fileswithurl;
-        const filteredFiles = filesData.filter((file: any) => !deletedFileIds.has(file.$id));
+        const filteredFiles = filesData.filter((file: CloudFile) => !deletedFileIds.has(file.$id));
         setFiles(filteredFiles);
 
         // Calculate total size in MB
@@ -507,7 +509,7 @@ export default function DashboardPage() {
                   <p className="text-gray-300">
                     Preview of {previewFile.name} (mock content)
                   </p>
-                  <img src={previewFile.fileUrl} alt="No preview for files" className=" text-white text-center w-36 h-60"/>
+                  <Image src={previewFile.fileUrl} alt="No preview for files" className=" text-white text-center w-36 h-60"/>
                   <Button onClick={() => setPreviewFile(null)} className=" text-purple-900 bg-purple-300 mt-2">
                     Close
                   </Button>

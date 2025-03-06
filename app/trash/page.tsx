@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 // Define interface for trash items
 interface TrashItem {

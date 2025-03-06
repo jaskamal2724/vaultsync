@@ -34,10 +34,10 @@ export async function DELETE(
       { message: "File permanently deleted from storage" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error deleting file:", error);
     return NextResponse.json(
-      { message: "Failed to delete file", error: error.message },
+      { message: "Failed to delete file", error },
       { status: 500 }
     );
   }
