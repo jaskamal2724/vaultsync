@@ -14,6 +14,7 @@ export async function DELETE(
   { params }: { params: { fileId: string } }
 ) {
   try {
+    console.log(req.method)
     const { fileId } =await  params;
 
     console.log("Deleting file from storage with ID:", fileId);

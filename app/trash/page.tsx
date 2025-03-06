@@ -20,7 +20,7 @@ interface TrashItem {
 }
 
 const TrashPage = () => {
-  const router = useRouter();
+  
   const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
 
   const fetchTrashItems = async () => {

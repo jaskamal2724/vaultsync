@@ -274,7 +274,7 @@ const Login = () => {
             <div className="w-full text-gray-400">
               {mode === "login" ? (
                 <>
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <Link
                     href="#"
                     className="text-purple-400 hover:text-purple-300"

@@ -42,21 +42,21 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error moving file to trash:", error);
 
     // Detailed error response
     return NextResponse.json(
       {
         message: "Failed to move file to trash",
-        error: error.message,
+        error: error
       },
       { status: 500 }
     );
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Fetch all documents from the collection
     const response = await databases.listDocuments(
@@ -71,11 +71,11 @@ export async function GET(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching documents:", error);
 
     return NextResponse.json(
-      { message: "Failed to fetch documents", error: error.message },
+      { message: "Failed to fetch documents", error: error },
       { status: 500 }
     );
   }

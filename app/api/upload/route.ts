@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { promisify } from "util";
 import { writeFile } from "fs/promises";
 import { v2 as cloudinary } from "cloudinary";
 import { Client, ID, Permission, Role, Storage } from "node-appwrite";
@@ -40,7 +38,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let uploadedFiles = [];
+    const uploadedFiles = [];
 
     for (const file of files) {
       const bytes = await file.arrayBuffer();

@@ -54,7 +54,7 @@ export const SparklesCore = (props: {
       initParticles()
       animate && animateParticles()
     }
-  }, [context, animate, dimensions]) // Added 'dimensions' to dependencies
+  }, []) // Added 'dimensions' to dependencies
 
   const initParticles = () => {
     const particlesArray = []

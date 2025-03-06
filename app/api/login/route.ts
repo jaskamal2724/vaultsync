@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
     const response = await signInWithEmailAndPassword(auth, email, password)
     return NextResponse.json({ message: "Logged In  successfully",name:response.user.displayName}, { status: 201 });
-  } catch (error:any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }

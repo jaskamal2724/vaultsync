@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ message: "User created successfully", email:user.email }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }

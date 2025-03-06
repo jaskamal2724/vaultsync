@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import {  NextRequest, NextResponse } from "next/server";
 import { Client, Databases } from "node-appwrite";
 
 // Initialize Appwrite client
@@ -15,6 +15,7 @@ export async function DELETE(
 ) {
   try {
     // Parse JSON body
+    console.log(req.method)
     const { fileId } = await  params;
     console.log(fileId);
     // Validate input
@@ -44,11 +45,11 @@ export async function DELETE(
             { status: 400 }
           );
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error deleting file:", error);
 
     return NextResponse.json(
-      { message: "Failed to delete file", error: error.message },
+      { message: "Failed to delete file", error: error },
       { status: 500 }
     );
   }

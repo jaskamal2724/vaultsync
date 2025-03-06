@@ -40,6 +40,9 @@ interface CloudFile {
   starred?: boolean;
   fileUrl: string; // Add this new field
 }
+interface DeletedFile{
+  fileid:string
+}
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -59,7 +62,7 @@ export default function DashboardPage() {
       // console.log(deletedFiles)
 
       // Extract file IDs from deletedFiles
-      const deletedFileIds = new Set(deletedFiles.map((file: any) => file.fileid));
+      const deletedFileIds = new Set(deletedFiles.map((file:DeletedFile) => file.fileid));
 
       const response = await axios.get("/api/files");
       if (response) {
