@@ -38,6 +38,9 @@ export default function LandingPage() {
   const handleStarted=()=>{
     router.replace("/signin")
   }
+
+  
+
   return (
     <div className="relative min-h-screen w-screen overflow-hidden bg-gradient-to-br from-black via-purple-900 to-black text-white flex flex-col items-center">
       {/* FloatingParticles */}
@@ -57,16 +60,10 @@ export default function LandingPage() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-3 relative z-50">
-            <Button
-              variant="ghost"
-              className="text-sm hover:bg-purple-700/50"
-              onClick={() => console.log("Login clicked")}
-            >
-              Login
-            </Button>
+            
             <Button
               className="text-sm hover:bg-purple-700"
-              onClick={() => console.log("Sign Up clicked")}
+              onClick={() => router.push("/signin")}
             >
               Sign Up
             </Button>
@@ -189,3 +186,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+
