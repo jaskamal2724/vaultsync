@@ -11,6 +11,7 @@ const storage = new Storage(client);
 
 export async function POST(req: NextRequest) {
   try {
+    
     const formData = await req.formData();
     const files = formData.getAll("file") as File[];
 
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
 
 // Handle OPTIONS request for CORS
 export async function OPTIONS(req: NextRequest) {
+  console.log(req.method)
   return NextResponse.json({}, {
     headers: {
       'Access-Control-Allow-Origin': '*',
