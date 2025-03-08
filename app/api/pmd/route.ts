@@ -17,11 +17,6 @@ const invalidInputResponse = NextResponse.json(
   { status: 400 }
 );
 
-const serverErrorResponse = (error: any) => NextResponse.json(
-  { message: "Failed to delete file", error: error.message || String(error) },
-  { status: 500 }
-);
-
 const successResponse = NextResponse.json(
   { message: "File permanently deleted from storage" },
   { status: 200 }
@@ -58,9 +53,15 @@ export async function DELETE(req: NextRequest) {
     // Enhanced error logging
     console.error(` Error deleting file:`, {
       error,
-      fileid: req.json().then(body => body.fileid).catch(() => "unknown")
+      fileid: req
+        .json()
+        .then((body) => body.fileid)
+        .catch(() => "unknown"),
     });
-    
-    return serverErrorResponse(error);
+
+    return NextResponse.json(
+      { message: "Failed to delete file", error },
+      { status: 500 }
+    );
   }
 }
