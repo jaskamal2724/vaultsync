@@ -54,11 +54,10 @@ export async function DELETE(req: NextRequest) {
     await storage.deleteFile(bucketId, fileid);
 
     return successResponse;
-  } catch (error: any) {
+  } catch (error) {
     // Enhanced error logging
     console.error(` Error deleting file:`, {
-      error: error.message || String(error),
-      stack: error.stack,
+      error,
       fileid: req.json().then(body => body.fileid).catch(() => "unknown")
     });
     
