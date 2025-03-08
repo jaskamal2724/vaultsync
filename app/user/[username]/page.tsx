@@ -125,7 +125,7 @@ export default function DashboardPage() {
       Array.from(uploadedFiles).forEach((file) => {
         formData.append("file", file);
       });
-  
+      
       const response = await axios.post("/api/upload", formData);
       if (response) {
         const newFiles = response.data.uploadedFiles.map((file:CloudFile) => ({

@@ -20,7 +20,7 @@ const client = new Client()
 const storage = new Storage(client);
 
 // Ensure "uploads" directory exists
-const uploadDir = path.join(process.cwd(), "public/uploads");
+const uploadDir = path.join(process.cwd());
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
