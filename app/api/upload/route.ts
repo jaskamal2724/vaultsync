@@ -1,16 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { writeFile } from "fs/promises";
-import { v2 as cloudinary } from "cloudinary";
 import { Client, ID, Permission, Role, Storage } from "node-appwrite";
 import { InputFile } from "node-appwrite/file";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -19,13 +9,6 @@ const client = new Client()
 
 const storage = new Storage(client);
 
-// Ensure "uploads" directory exists
-const uploadDir = path.join(process.cwd());
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Async handler for file upload
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -41,18 +24,22 @@ export async function POST(req: NextRequest) {
     const uploadedFiles = [];
 
     for (const file of files) {
+      // Convert File to Buffer
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${file.name}`;
-      const filepath = path.join(uploadDir, filename);
-
-      await writeFile(filepath, buffer);
-
-      const nodefile = InputFile.fromPath(filepath, filename);
+      
+      // Use InputFile.fromBuffer instead of fromPath
+      // This doesn't require writing to the filesystem
+      const inputFile = InputFile.fromBuffer(
+        buffer,
+        file.name,
+      );
+      
+      // Upload directly to Appwrite
       const response = await storage.createFile(
         process.env.BUCKET_ID as string,
         ID.unique(),
-        nodefile,
+        inputFile,
         [Permission.read(Role.any())]
       );
 
@@ -65,18 +52,35 @@ export async function POST(req: NextRequest) {
         sizeOriginal: response.sizeOriginal.toString(),
         createdAt: response.$createdAt,
       });
-
-      fs.unlinkSync(filepath)
     }
 
     return NextResponse.json(
       { msg: "file uploaded", uploadedFiles },
-      { status: 200 }
+      { 
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      }
     );
   } catch (error) {
+    console.error("Upload error:", error);
     return NextResponse.json(
-      { message: "File upload failed", error },
+      { message: "File upload failed", error: JSON.stringify(error) },
       { status: 500 }
     );
   }
+}
+
+// Handle OPTIONS request for CORS
+export async function OPTIONS(req: NextRequest) {
+  return NextResponse.json({}, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    }
+  });
 }
