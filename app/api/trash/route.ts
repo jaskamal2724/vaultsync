@@ -12,10 +12,10 @@ const databases = new Databases(client);
 export async function POST(req: NextRequest) {
   try {
     // Parse JSON body
-    const { name, id } = await req.json();
+    const { name, $id } = await req.json();
 
     // Validate input
-    if (!name || !id) {
+    if (!name || !$id) {
       return NextResponse.json(
         { message: "Filename and File ID are required" },
         { status: 400 }
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       {
         // Required fields
         name: name,
-        fileid: id,
+        fileid: $id,
       },
       [Permission.read(Role.any())]
     );

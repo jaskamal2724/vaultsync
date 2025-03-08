@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
       uploadedFiles.push({
         name: response.name,
-        id: response.$id,
+        $id: response.$id,
         fileUrl,
         sizeOriginal: response.sizeOriginal.toString(),
         createdAt: response.$createdAt,

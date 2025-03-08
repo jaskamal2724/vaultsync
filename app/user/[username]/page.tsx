@@ -59,36 +59,47 @@ export default function DashboardPage() {
 
   const getallfiles = async () => {
     try {
-      const deletedFilesResponse = await axios.get("/api/trash");
-      const deletedFiles = deletedFilesResponse.data.documents || [];
-      // console.log(deletedFiles)
-
-      // Extract file IDs from deletedFiles
-      const deletedFileIds = new Set(deletedFiles.map((file:DeletedFile) => file.fileid));
-
-      const response = await axios.get("/api/files");
-      if (response) {
-        // console.log("all uploaded files", response.data.fileswithurl);
-
-        const filesData = response.data.fileswithurl;
-        const filteredFiles = filesData.filter((file: CloudFile) => !deletedFileIds.has(file.$id));
-        setFiles(filteredFiles);
-
-        // Calculate total size in MB
-        const totalSizeMB = filesData.reduce((acc: number, file: CloudFile) => {
-          const sizeInMB = parseFloat(file.sizeOriginal) / (1024 * 1024);
-          return acc + sizeInMB;
-        }, 0);
-        setUsedStorage(totalSizeMB);
-      } else {
-        console.log("files not got");
+      // Use Promise.all to fetch both API endpoints concurrently
+      const [deletedFilesResponse, filesResponse] = await Promise.all([
+        axios.get("/api/trash"),
+        axios.get("/api/files")
+      ]);
+  
+      if (!filesResponse) {
+        console.error("Failed to fetch files: No response received");
+        return;
       }
+  
+      const deletedFiles = deletedFilesResponse.data.documents || [];
+      const filesData = filesResponse.data.fileswithurl || [];
+  
+      // Use a Set for O(1) lookups instead of array filtering
+      const deletedFileIds = new Set(
+        deletedFiles.map((file: DeletedFile) => file.fileid)
+      );
+  
+      // Filter files in one pass and calculate storage simultaneously
+      let totalSizeMB = 0;
+      const filteredFiles = filesData.filter((file: CloudFile) => {
+        if (!deletedFileIds.has(file.$id)) {
+          // Only calculate size for files we're keeping
+          const fileSize = Number(file.sizeOriginal) || 0;
+          const sizeInMB = fileSize / (1024 * 1024);
+          totalSizeMB += sizeInMB;
+          return true;
+        }
+        return false;
+      });
+  
+      // Update state only once with the final values
+      setFiles(filteredFiles);
+      setUsedStorage(totalSizeMB);
     } catch (error) {
-      console.log("error in fetching files ", error);
+      console.error("Error fetching files:", error);
+      // Consider adding error handling, such as setting an error state
     }
   };
 
-  
   useEffect(() => {
    
     getallfiles();
@@ -143,7 +154,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDelete = async (id: string, name:string) => {
+  const handleDelete = async ($id: string, name:string) => {
     // const fileToDelete = files.find((f) => f.$id === id);
     // if (!fileToDelete) return;
 
@@ -151,7 +162,7 @@ export default function DashboardPage() {
     // setFiles(files.filter((f) => f.$id !== id));
     // setUsedStorage((prev) => prev - sizeInMB);
     try {
-      const res = await axios.post("/api/trash",{name,id})
+      const res = await axios.post("/api/trash",{name,$id})
       if(res){
         // console.log(res)
         toast.success("deleted", { autoClose: 1000 });
